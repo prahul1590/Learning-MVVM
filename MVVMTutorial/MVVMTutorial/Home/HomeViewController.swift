@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 class HomeViewController: UIViewController {
 
@@ -13,6 +14,8 @@ class HomeViewController: UIViewController {
     
     private let viewModel = HomeViewModel()
     
+    private var cancallables : Set<AnyCancellable> = []
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -24,9 +27,10 @@ class HomeViewController: UIViewController {
     }
     
     private func setupBinders(){
-        viewModel.welcomeMessage.bind { [weak self] message in
+   
+        self.viewModel.$welcomeMessage.sink { [weak self] message in
             self?.lblWelcomeMessage.text = message
-        }
+        }.store(in: &cancallables)
     }
     
 }

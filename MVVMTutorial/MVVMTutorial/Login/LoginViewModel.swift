@@ -9,11 +9,11 @@ import Foundation
 
 final class LoginViewModel{
     
-    var error: ObservableObject<String?> = ObservableObject(value: "")
+    @Published var error: String?
     
     func login(email: String, password: String){
         NetworkService.shared.login(email: email, password: password) {[weak self] success in
-            self?.error.value = success ? nil : "Invalid Credentials"
+            self?.error = success ? nil : "Invalid Credentials"
         }
     }
 }

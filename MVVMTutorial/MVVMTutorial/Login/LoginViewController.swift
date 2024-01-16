@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 class LoginViewController: UIViewController {
 
@@ -13,6 +14,8 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var txtPassword: UITextField!
     
     private let viewModel = LoginViewModel()
+    
+    private var cancallables : Set<AnyCancellable> = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,13 +25,13 @@ class LoginViewController: UIViewController {
     }
     
     private func setupBinders(){
-        self.viewModel.error.bind { [weak self] error in
+        self.viewModel.$error.sink { [weak self] error in
             if let error = error{
                 print(error)
             }else{
                 self?.goToHomePage()
             }
-        }
+        }.store(in: &cancallables)
     }
 
     private func goToHomePage(){
